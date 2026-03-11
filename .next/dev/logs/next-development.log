@@ -1,0 +1,12 @@
+[00:00:02.110] Server  LOG     ✓ Ready in 1582ms
+[00:01:59.119] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:07.270] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:02:39.576] Server  LOG     ✓ Compiled in 370ms
+[00:02:40.098] Server  ERROR   ⨯ Error: The default export is not a React Component in "/layout"
+[00:02:40.361] Server  ERROR   ⨯ Error: The default export is not a React Component in "/layout"
+[00:02:41.783] Browser ERROR   uncaughtError: Error: The default export is not a React Component in "/layout"
+[00:02:47.311] Server  LOG     ✓ Compiled in 25ms
+[00:02:56.523] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:06:14.150] Server  LOG     ✓ Compiled in 26ms
+[00:06:20.345] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:07:43.361] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
