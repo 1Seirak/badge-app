@@ -13,3 +13,4 @@
 [00:56:54.104] Server  LOG     ✓ Compiled in 77ms
 [00:56:54.131] Server  WARN    ⚠ Fast Refresh had to perform a full reload when ./Documents/badge-app/app/page.js changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
 [00:56:55.279] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:59:19.700] Server  LOG     ✓ Compiled in 21ms
