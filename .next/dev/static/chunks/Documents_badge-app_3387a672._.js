@@ -4,7 +4,7 @@
 
 __turbopack_context__.s([
     "default",
-    ()=>BadgeApp
+    ()=>Home
 ]);
 var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Documents/badge-app/node_modules/next/dist/compiled/react/jsx-dev-runtime.js [app-client] (ecmascript)");
 var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__ = __turbopack_context__.i("[project]/Documents/badge-app/node_modules/next/dist/compiled/react/index.js [app-client] (ecmascript)");
@@ -12,363 +12,216 @@ var __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f
 var _s = __turbopack_context__.k.signature();
 "use client";
 ;
-function BadgeApp() {
+function Home() {
     _s();
-    const [info, setInfo] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
-        firstName: '',
-        lastName: '',
-        project: '',
-        startDate: '',
-        endDate: '',
-        details: '',
-        imageLink: '',
-        wallet: ''
+    const [formData, setFormData] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])({
+        recipient: "",
+        name: "",
+        project: ""
     });
-    const [status, setStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])('');
-    // ASTUCE : On génère une URL d'image qui contient le texte du projet pour respecter la consigne "générée"
-    const generatedImageUrl = info.project ? `https://placehold.co/600x400/8247e5/white?text=${encodeURIComponent(info.project)}+for+${encodeURIComponent(info.firstName)}` : info.imageLink;
-    const handleMint = async ()=>{
-        if (!info.wallet) return setStatus('❌ Adresse wallet manquante');
-        setStatus('Minting en cours... ⏳');
+    const [status, setStatus] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])("");
+    const [badgeUrl, setBadgeUrl] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(""); // Contiendra l'URL après le mint
+    const [loading, setLoading] = (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$index$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["useState"])(false);
+    const handleSubmit = async (e)=>{
+        e.preventDefault();
+        setLoading(true);
+        setStatus("Génération du badge en cours...");
         try {
-            const response = await fetch('/api/mint', {
-                method: 'POST',
+            const res = await fetch("/api/mint", {
+                method: "POST",
                 headers: {
-                    'Content-Type': 'application/json'
+                    "Content-Type": "application/json"
                 },
-                // On envoie l'image générée dynamiquement
-                body: JSON.stringify({
-                    ...info,
-                    generatedImage: generatedImageUrl
-                })
+                body: JSON.stringify(formData)
             });
-            const data = await response.json();
+            const data = await res.json();
             if (data.success) {
                 setStatus(`✅ Succès ! Hash: ${data.hash.substring(0, 10)}...`);
+                // On suppose que ton API renvoie l'URL de l'image générée
+                if (data.imageUrl) setBadgeUrl(data.imageUrl);
             } else {
-                setStatus('❌ Erreur : ' + data.error);
+                setStatus(`❌ Erreur : ${data.error}`);
             }
         } catch (err) {
-            setStatus('❌ Erreur réseau');
+            setStatus("❌ Erreur lors de la connexion au serveur");
+        } finally{
+            setLoading(false);
         }
     };
-    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-        style: {
-            display: 'flex',
-            flexWrap: 'wrap',
-            padding: '20px',
-            gap: '20px',
-            fontFamily: 'sans-serif',
-            backgroundColor: '#f0f2f5'
-        },
-        children: [
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    flex: '1',
-                    minWidth: '350px',
-                    background: 'white',
-                    padding: '20px',
-                    borderRadius: '10px'
-                },
-                children: [
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h2", {
-                        style: {
-                            color: '#8247e5'
-                        },
-                        children: "Badge Info"
-                    }, void 0, false, {
-                        fileName: "[project]/Documents/badge-app/app/page.js",
-                        lineNumber: 44,
-                        columnNumber: 9
-                    }, this),
-                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                        style: {
-                            display: 'grid',
-                            gap: '10px'
-                        },
-                        children: [
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                placeholder: "First Name",
-                                onChange: (e)=>setInfo({
-                                        ...info,
-                                        firstName: e.target.value
-                                    }),
-                                style: inputStyle
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 46,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                placeholder: "Last Name",
-                                onChange: (e)=>setInfo({
-                                        ...info,
-                                        lastName: e.target.value
-                                    }),
-                                style: inputStyle
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 47,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                placeholder: "Main Project",
-                                onChange: (e)=>setInfo({
-                                        ...info,
-                                        project: e.target.value
-                                    }),
-                                style: inputStyle
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 48,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                                style: {
-                                    display: 'flex',
-                                    gap: '5px'
-                                },
-                                children: [
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "date",
-                                        title: "Start Date",
-                                        onChange: (e)=>setInfo({
-                                                ...info,
-                                                startDate: e.target.value
-                                            }),
-                                        style: inputStyle
-                                    }, void 0, false, {
-                                        fileName: "[project]/Documents/badge-app/app/page.js",
-                                        lineNumber: 50,
-                                        columnNumber: 13
-                                    }, this),
-                                    /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                        type: "date",
-                                        title: "End Date",
-                                        onChange: (e)=>setInfo({
-                                                ...info,
-                                                endDate: e.target.value
-                                            }),
-                                        style: inputStyle
-                                    }, void 0, false, {
-                                        fileName: "[project]/Documents/badge-app/app/page.js",
-                                        lineNumber: 51,
-                                        columnNumber: 13
-                                    }, this)
-                                ]
-                            }, void 0, true, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 49,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("textarea", {
-                                placeholder: "Details",
-                                onChange: (e)=>setInfo({
-                                        ...info,
-                                        details: e.target.value
-                                    }),
-                                style: inputStyle
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 53,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                placeholder: "Image Link (Backup)",
-                                onChange: (e)=>setInfo({
-                                        ...info,
-                                        imageLink: e.target.value
-                                    }),
-                                style: inputStyle
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 54,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
-                                placeholder: "Recipient Wallet (0x...)",
-                                onChange: (e)=>setInfo({
-                                        ...info,
-                                        wallet: e.target.value
-                                    }),
-                                style: inputStyle
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 55,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
-                                onClick: handleMint,
-                                style: btnStyle,
-                                children: "Mint Badge (Gasless)"
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 57,
-                                columnNumber: 11
-                            }, this),
-                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                style: {
-                                    fontSize: '14px'
-                                },
-                                children: status
-                            }, void 0, false, {
-                                fileName: "[project]/Documents/badge-app/app/page.js",
-                                lineNumber: 58,
-                                columnNumber: 11
-                            }, this)
-                        ]
-                    }, void 0, true, {
-                        fileName: "[project]/Documents/badge-app/app/page.js",
-                        lineNumber: 45,
-                        columnNumber: 9
-                    }, this)
-                ]
-            }, void 0, true, {
-                fileName: "[project]/Documents/badge-app/app/page.js",
-                lineNumber: 43,
-                columnNumber: 7
-            }, this),
-            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                style: {
-                    flex: '1',
-                    minWidth: '300px',
-                    display: 'flex',
-                    justifyContent: 'center'
-                },
-                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                    style: badgeStyle,
+    return /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("main", {
+        className: "flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50",
+        children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+            className: "w-full max-w-md p-8 bg-white shadow-xl rounded-2xl",
+            children: [
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h1", {
+                    className: "text-2xl font-bold text-center mb-6 text-gray-800",
+                    children: "Badge Minting Portal"
+                }, void 0, false, {
+                    fileName: "[project]/Documents/badge-app/app/page.js",
+                    lineNumber: 44,
+                    columnNumber: 9
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("form", {
+                    onSubmit: handleSubmit,
+                    className: "space-y-4",
                     children: [
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                padding: '15px',
-                                background: '#8247e5',
-                                color: 'white',
-                                fontWeight: 'bold'
-                            },
-                            children: "PROJECT COMPLETION"
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "text",
+                            placeholder: "Adresse du Wallet (0x...)",
+                            className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-black",
+                            onChange: (e)=>setFormData({
+                                    ...formData,
+                                    recipient: e.target.value
+                                }),
+                            required: true
                         }, void 0, false, {
                             fileName: "[project]/Documents/badge-app/app/page.js",
-                            lineNumber: 65,
+                            lineNumber: 49,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
-                            src: generatedImageUrl || 'https://via.placeholder.com/150',
-                            style: {
-                                width: '100%'
-                            },
-                            alt: "Generated Badge"
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "text",
+                            placeholder: "Nom du Récipiendaire",
+                            className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-black",
+                            onChange: (e)=>setFormData({
+                                    ...formData,
+                                    name: e.target.value
+                                }),
+                            required: true
                         }, void 0, false, {
                             fileName: "[project]/Documents/badge-app/app/page.js",
-                            lineNumber: 66,
+                            lineNumber: 56,
                             columnNumber: 11
                         }, this),
-                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
-                            style: {
-                                padding: '20px'
-                            },
-                            children: [
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("h3", {
-                                    style: {
-                                        margin: '0'
-                                    },
-                                    children: [
-                                        info.firstName,
-                                        " ",
-                                        info.lastName
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/Documents/badge-app/app/page.js",
-                                    lineNumber: 68,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    style: {
-                                        margin: '5px 0',
-                                        fontWeight: 'bold',
-                                        color: '#8247e5'
-                                    },
-                                    children: info.project || 'Project Name'
-                                }, void 0, false, {
-                                    fileName: "[project]/Documents/badge-app/app/page.js",
-                                    lineNumber: 69,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    style: {
-                                        fontSize: '12px',
-                                        color: '#666'
-                                    },
-                                    children: [
-                                        info.startDate,
-                                        " to ",
-                                        info.endDate
-                                    ]
-                                }, void 0, true, {
-                                    fileName: "[project]/Documents/badge-app/app/page.js",
-                                    lineNumber: 70,
-                                    columnNumber: 13
-                                }, this),
-                                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
-                                    style: {
-                                        fontSize: '13px',
-                                        fontStyle: 'italic'
-                                    },
-                                    children: info.details
-                                }, void 0, false, {
-                                    fileName: "[project]/Documents/badge-app/app/page.js",
-                                    lineNumber: 71,
-                                    columnNumber: 13
-                                }, this)
-                            ]
-                        }, void 0, true, {
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("input", {
+                            type: "text",
+                            placeholder: "Nom du Projet",
+                            className: "w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-black",
+                            onChange: (e)=>setFormData({
+                                    ...formData,
+                                    project: e.target.value
+                                }),
+                            required: true
+                        }, void 0, false, {
                             fileName: "[project]/Documents/badge-app/app/page.js",
-                            lineNumber: 67,
+                            lineNumber: 63,
+                            columnNumber: 11
+                        }, this),
+                        /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("button", {
+                            type: "submit",
+                            disabled: loading,
+                            className: `w-full p-3 text-white font-bold rounded-lg transition ${loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"}`,
+                            children: loading ? "Chargement..." : "Mint Badge"
+                        }, void 0, false, {
+                            fileName: "[project]/Documents/badge-app/app/page.js",
+                            lineNumber: 71,
                             columnNumber: 11
                         }, this)
                     ]
                 }, void 0, true, {
                     fileName: "[project]/Documents/badge-app/app/page.js",
-                    lineNumber: 64,
+                    lineNumber: 48,
+                    columnNumber: 9
+                }, this),
+                status && /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                    className: "mt-4 text-sm text-center font-medium text-gray-600 break-words",
+                    children: status
+                }, void 0, false, {
+                    fileName: "[project]/Documents/badge-app/app/page.js",
+                    lineNumber: 83,
+                    columnNumber: 11
+                }, this),
+                /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                    className: "mt-8",
+                    children: badgeUrl ? /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "animate-fadeIn",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-center text-sm font-bold text-green-600 mb-2",
+                                children: "Votre Badge Officiel :"
+                            }, void 0, false, {
+                                fileName: "[project]/Documents/badge-app/app/page.js",
+                                lineNumber: 92,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("img", {
+                                src: badgeUrl,
+                                alt: "Generated Badge",
+                                className: "w-full h-auto rounded-lg border-4 border-green-100 shadow-md"
+                            }, void 0, false, {
+                                fileName: "[project]/Documents/badge-app/app/page.js",
+                                lineNumber: 93,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Documents/badge-app/app/page.js",
+                        lineNumber: 91,
+                        columnNumber: 13
+                    }, this) : /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                        className: "border-2 border-dashed border-gray-200 rounded-lg p-12 flex flex-col items-center justify-center bg-gray-50",
+                        children: [
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("div", {
+                                className: "w-16 h-16 mb-2 text-gray-300",
+                                children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("svg", {
+                                    fill: "none",
+                                    stroke: "currentColor",
+                                    viewBox: "0 0 24 24",
+                                    children: /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("path", {
+                                        strokeLinecap: "round",
+                                        strokeLinejoin: "round",
+                                        strokeWidth: "2",
+                                        d: "M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"
+                                    }, void 0, false, {
+                                        fileName: "[project]/Documents/badge-app/app/page.js",
+                                        lineNumber: 103,
+                                        columnNumber: 19
+                                    }, this)
+                                }, void 0, false, {
+                                    fileName: "[project]/Documents/badge-app/app/page.js",
+                                    lineNumber: 102,
+                                    columnNumber: 17
+                                }, this)
+                            }, void 0, false, {
+                                fileName: "[project]/Documents/badge-app/app/page.js",
+                                lineNumber: 101,
+                                columnNumber: 15
+                            }, this),
+                            /*#__PURE__*/ (0, __TURBOPACK__imported__module__$5b$project$5d2f$Documents$2f$badge$2d$app$2f$node_modules$2f$next$2f$dist$2f$compiled$2f$react$2f$jsx$2d$dev$2d$runtime$2e$js__$5b$app$2d$client$5d$__$28$ecmascript$29$__["jsxDEV"])("p", {
+                                className: "text-gray-400 text-sm italic",
+                                children: "L'aperçu apparaîtra ici après le mint"
+                            }, void 0, false, {
+                                fileName: "[project]/Documents/badge-app/app/page.js",
+                                lineNumber: 106,
+                                columnNumber: 15
+                            }, this)
+                        ]
+                    }, void 0, true, {
+                        fileName: "[project]/Documents/badge-app/app/page.js",
+                        lineNumber: 100,
+                        columnNumber: 13
+                    }, this)
+                }, void 0, false, {
+                    fileName: "[project]/Documents/badge-app/app/page.js",
+                    lineNumber: 89,
                     columnNumber: 9
                 }, this)
-            }, void 0, false, {
-                fileName: "[project]/Documents/badge-app/app/page.js",
-                lineNumber: 63,
-                columnNumber: 7
-            }, this)
-        ]
-    }, void 0, true, {
+            ]
+        }, void 0, true, {
+            fileName: "[project]/Documents/badge-app/app/page.js",
+            lineNumber: 43,
+            columnNumber: 7
+        }, this)
+    }, void 0, false, {
         fileName: "[project]/Documents/badge-app/app/page.js",
-        lineNumber: 40,
+        lineNumber: 42,
         columnNumber: 5
     }, this);
 }
-_s(BadgeApp, "8WiE6W113dMFFDp/SPYlB0m8hsM=");
-_c = BadgeApp;
-const inputStyle = {
-    padding: '8px',
-    border: '1px solid #ddd',
-    borderRadius: '4px',
-    width: '100%'
-};
-const btnStyle = {
-    padding: '12px',
-    background: '#8247e5',
-    color: 'white',
-    border: 'none',
-    cursor: 'pointer',
-    borderRadius: '5px'
-};
-const badgeStyle = {
-    width: '300px',
-    background: 'white',
-    boxShadow: '0 4px 15px rgba(0,0,0,0.1)',
-    borderRadius: '10px',
-    overflow: 'hidden',
-    textAlign: 'center'
-};
+_s(Home, "uMXfHveaXTXOOPfD0R4yp9B3Uq4=");
+_c = Home;
 var _c;
-__turbopack_context__.k.register(_c, "BadgeApp");
+__turbopack_context__.k.register(_c, "Home");
 if (typeof globalThis.$RefreshHelpers$ === 'object' && globalThis.$RefreshHelpers !== null) {
     __turbopack_context__.k.registerExports(__turbopack_context__.m, globalThis.$RefreshHelpers$);
 }

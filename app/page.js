@@ -1,81 +1,113 @@
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
 
-export default function BadgeApp() {
-  const [info, setInfo] = useState({ 
-    firstName: '', lastName: '', project: '', 
-    startDate: '', endDate: '', details: '', 
-    imageLink: '', wallet: '' 
+export default function Home() {
+  const [formData, setFormData] = useState({
+    recipient: "",
+    name: "",
+    project: "",
   });
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
+  const [badgeUrl, setBadgeUrl] = useState(""); // Contiendra l'URL après le mint
+  const [loading, setLoading] = useState(false);
 
-  // ASTUCE : On génère une URL d'image qui contient le texte du projet pour respecter la consigne "générée"
-  const generatedImageUrl = info.project 
-    ? `https://placehold.co/600x400/8247e5/white?text=${encodeURIComponent(info.project)}+for+${encodeURIComponent(info.firstName)}`
-    : info.imageLink;
-
-  const handleMint = async () => {
-    if (!info.wallet) return setStatus('❌ Adresse wallet manquante');
-    setStatus('Minting en cours... ⏳');
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus("Génération du badge en cours...");
     
     try {
-      const response = await fetch('/api/mint', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // On envoie l'image générée dynamiquement
-        body: JSON.stringify({ ...info, generatedImage: generatedImageUrl }),
+      const res = await fetch("/api/mint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-      const data = await response.json();
+
+      const data = await res.json();
       if (data.success) {
-        setStatus(`✅ Succès ! Hash: ${data.hash.substring(0,10)}...`);
+        setStatus(`✅ Succès ! Hash: ${data.hash.substring(0, 10)}...`);
+        // On suppose que ton API renvoie l'URL de l'image générée
+        if (data.imageUrl) setBadgeUrl(data.imageUrl);
       } else {
-        setStatus('❌ Erreur : ' + data.error);
+        setStatus(`❌ Erreur : ${data.error}`);
       }
     } catch (err) {
-      setStatus('❌ Erreur réseau');
+      setStatus("❌ Erreur lors de la connexion au serveur");
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', padding: '20px', gap: '20px', fontFamily: 'sans-serif', backgroundColor: '#f0f2f5' }}>
-      
-      {/* 1. FORMULAIRE COMPLET */}
-      <div style={{ flex: '1', minWidth: '350px', background: 'white', padding: '20px', borderRadius: '10px' }}>
-        <h2 style={{ color: '#8247e5' }}>Badge Info</h2>
-        <div style={{ display: 'grid', gap: '10px' }}>
-          <input placeholder="First Name" onChange={e => setInfo({...info, firstName: e.target.value})} style={inputStyle} />
-          <input placeholder="Last Name" onChange={e => setInfo({...info, lastName: e.target.value})} style={inputStyle} />
-          <input placeholder="Main Project" onChange={e => setInfo({...info, project: e.target.value})} style={inputStyle} />
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <input type="date" title="Start Date" onChange={e => setInfo({...info, startDate: e.target.value})} style={inputStyle} />
-            <input type="date" title="End Date" onChange={e => setInfo({...info, endDate: e.target.value})} style={inputStyle} />
-          </div>
-          <textarea placeholder="Details" onChange={e => setInfo({...info, details: e.target.value})} style={inputStyle} />
-          <input placeholder="Image Link (Backup)" onChange={e => setInfo({...info, imageLink: e.target.value})} style={inputStyle} />
-          <input placeholder="Recipient Wallet (0x...)" onChange={e => setInfo({...info, wallet: e.target.value})} style={inputStyle} />
-          
-          <button onClick={handleMint} style={btnStyle}>Mint Badge (Gasless)</button>
-          <p style={{ fontSize: '14px' }}>{status}</p>
-        </div>
-      </div>
+    <main className="flex flex-col items-center justify-center min-h-screen p-4 bg-gray-50">
+      <div className="w-full max-w-md p-8 bg-white shadow-xl rounded-2xl">
+        <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">
+          Badge Minting Portal
+        </h1>
 
-      {/* 2. LIVE PREVIEW */}
-      <div style={{ flex: '1', minWidth: '300px', display: 'flex', justifyContent: 'center' }}>
-        <div style={badgeStyle}>
-          <div style={{ padding: '15px', background: '#8247e5', color: 'white', fontWeight: 'bold' }}>PROJECT COMPLETION</div>
-          <img src={generatedImageUrl || 'https://via.placeholder.com/150'} style={{ width: '100%' }} alt="Generated Badge" />
-          <div style={{ padding: '20px' }}>
-            <h3 style={{ margin: '0' }}>{info.firstName} {info.lastName}</h3>
-            <p style={{ margin: '5px 0', fontWeight: 'bold', color: '#8247e5' }}>{info.project || 'Project Name'}</p>
-            <p style={{ fontSize: '12px', color: '#666' }}>{info.startDate} to {info.endDate}</p>
-            <p style={{ fontSize: '13px', fontStyle: 'italic' }}>{info.details}</p>
-          </div>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            placeholder="Adresse du Wallet (0x...)"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-black"
+            onChange={(e) => setFormData({ ...formData, recipient: e.target.value })}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Nom du Récipiendaire"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-black"
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+            required
+          />
+          <input
+            type="text"
+            placeholder="Nom du Projet"
+            className="w-full p-3 border rounded-lg focus:ring-2 focus:ring-blue-500 outline-none text-black"
+            onChange={(e) => setFormData({ ...formData, project: e.target.value })}
+            required
+          />
+          
+          <button
+            type="submit"
+            disabled={loading}
+            className={`w-full p-3 text-white font-bold rounded-lg transition ${
+              loading ? "bg-gray-400" : "bg-blue-600 hover:bg-blue-700"
+            }`}
+          >
+            {loading ? "Chargement..." : "Mint Badge"}
+          </button>
+        </form>
+
+        {status && (
+          <p className="mt-4 text-sm text-center font-medium text-gray-600 break-words">
+            {status}
+          </p>
+        )}
+
+        {/* SECTION DYNAMIQUE DE L'IMAGE */}
+        <div className="mt-8">
+          {badgeUrl ? (
+            <div className="animate-fadeIn">
+              <p className="text-center text-sm font-bold text-green-600 mb-2">Votre Badge Officiel :</p>
+              <img 
+                src={badgeUrl} 
+                alt="Generated Badge" 
+                className="w-full h-auto rounded-lg border-4 border-green-100 shadow-md"
+              />
+            </div>
+          ) : (
+            <div className="border-2 border-dashed border-gray-200 rounded-lg p-12 flex flex-col items-center justify-center bg-gray-50">
+              <div className="w-16 h-16 mb-2 text-gray-300">
+                <svg fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path>
+                </svg>
+              </div>
+              <p className="text-gray-400 text-sm italic">L'aperçu apparaîtra ici après le mint</p>
+            </div>
+          )}
         </div>
       </div>
-    </div>
+    </main>
   );
 }
-
-const inputStyle = { padding: '8px', border: '1px solid #ddd', borderRadius: '4px', width: '100%' };
-const btnStyle = { padding: '12px', background: '#8247e5', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px' };
-const badgeStyle = { width: '300px', background: 'white', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', borderRadius: '10px', overflow: 'hidden', textAlign: 'center' };
