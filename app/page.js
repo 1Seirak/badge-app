@@ -62,7 +62,7 @@ export default function Home() {
   const columnCardStyle = {
     flex: "1", backgroundColor: colors.card, padding: "35px", borderRadius: "8px",
     boxShadow: "0 4px 20px rgba(0,0,0,0.05)", borderTop: `4px solid ${colors.elcaRed}`,
-    minHeight: "600px", display: "flex", flexDirection: "column"
+    minHeight: "650px", display: "flex", flexDirection: "column"
   };
 
   return (
@@ -108,34 +108,10 @@ export default function Home() {
           {status && <div style={{ marginTop: "15px", fontSize: "12px", textAlign: "center", color: colors.elcaRed, fontWeight: "600" }}>{status}</div>}
         </div>
 
-        {/* RIGHT: LIVE PREVIEW */}
+        {/* RIGHT: LIVE PREVIEW (RECTANGULAR IMAGE) */}
         <div style={columnCardStyle}>
           <h1 style={{ fontSize: "22px", fontWeight: "800", marginBottom: "20px", color: colors.dark }}>LIVE PREVIEW</h1>
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", border: `1px solid ${colors.border}`, borderRadius: "12px", background: "white", position: "relative", overflow: "hidden" }}>
+          <div style={{ flex: 1, display: "flex", flexDirection: "column", border: `1px solid ${colors.border}`, borderRadius: "12px", background: "white", overflow: "hidden" }}>
             
-            {/* Si le badge est minté, on montre le résultat final, sinon on montre le live preview */}
             {badgeUrl ? (
-               <img src={badgeUrl} alt="Final Badge" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            ) : (
-              <div style={{ width: "100%", height: "100%", padding: "40px", display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center", backgroundColor: "#fff" }}>
-                <div style={{ width: "120px", height: "120px", borderRadius: "50%", backgroundColor: "#fef2f2", display: "flex", alignItems: "center", justifyContent: "center", border: `2px solid ${colors.elcaRed}`, marginBottom: "20px", overflow: "hidden" }}>
-                  {formData.imageLink ? <img src={formData.imageLink} style={{width: '100%', height: '100%', objectFit: 'cover'}} /> : <span style={{fontSize: "40px"}}>🏆</span>}
-                </div>
-                <h2 style={{ color: colors.elcaRed, margin: "0", fontSize: "24px", fontWeight: "bold" }}>{formData.firstName || "First"} {formData.lastName || "Last"}</h2>
-                <p style={{ fontWeight: "600", color: colors.dark, margin: "10px 0" }}>{formData.mainProject || "Project Name"}</p>
-                <p style={{ fontSize: "12px", color: "#666", maxWidth: "80%" }}>{formData.details || "Your project details will appear here..."}</p>
-                <div style={{ marginTop: "auto", fontSize: "10px", color: "#999", borderTop: "1px solid #eee", paddingTop: "10px", width: "100%" }}>
-                  {formData.startDate && formData.completionDate ? `${formData.startDate} → ${formData.completionDate}` : "Select dates"}
-                </div>
-              </div>
-            )}
-          </div>
-          <p style={{ textAlign: "center", fontSize: "11px", color: "#999", marginTop: "15px" }}>
-            {badgeUrl ? "OFFICIAL NFT GENERATED" : "REAL-TIME DRAFT"}
-          </p>
-        </div>
-
-      </div>
-    </div>
-  );
-}
+               <img src={badgeUrl} alt="Final Badge" style={{ width: "100%", height: "100
