@@ -108,7 +108,7 @@ export default function Home() {
           {status && <div style={{ marginTop: "15px", fontSize: "12px", textAlign: "center", color: colors.elcaRed, fontWeight: "600" }}>{status}</div>}
         </div>
 
-        {/* RIGHT: LIVE PREVIEW */}
+        {/* RIGHT: LIVE PREVIEW (MINIMALIST) */}
         <div style={columnCardStyle}>
           <h1 style={{ fontSize: "22px", fontWeight: "800", marginBottom: "20px", color: colors.dark }}>LIVE PREVIEW</h1>
           <div style={{ flex: 1, display: "flex", flexDirection: "column", border: `1px solid ${colors.border}`, borderRadius: "12px", background: "white", overflow: "hidden" }}>
@@ -117,34 +117,44 @@ export default function Home() {
                <img src={badgeUrl} alt="Final Badge" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             ) : (
               <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
-                {/* RECTANGULAR IMAGE SPACE (EMPTY BY DEFAULT) */}
+                {/* IMAGE AREA */}
                 <div style={{ width: "100%", height: "200px", backgroundColor: "#f9fafb", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: `2px solid ${colors.elcaRed}`, overflow: "hidden" }}>
                   {formData.imageLink && (
                     <img src={formData.imageLink} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
                   )}
                 </div>
 
-                {/* TEXT CONTENT */}
+                {/* TEXT AREA - ONLY SHOWS IF DATA EXISTS */}
                 <div style={{ padding: "30px", textAlign: "center", display: "flex", flexDirection: "column", flex: 1 }}>
-                  <h2 style={{ color: colors.elcaRed, margin: "0", fontSize: "26px", fontWeight: "bold", textTransform: "uppercase" }}>
-                    {formData.firstName || "First"} {formData.lastName || "Last"}
-                  </h2>
-                  <p style={{ fontWeight: "700", color: colors.dark, margin: "15px 0", fontSize: "18px" }}>
-                    {formData.mainProject || "Project Name"}
-                  </p>
-                  <p style={{ fontSize: "13px", color: "#666", lineHeight: "1.5" }}>
-                    {formData.details || "Description will appear here..."}
-                  </p>
+                  {(formData.firstName || formData.lastName) && (
+                    <h2 style={{ color: colors.elcaRed, margin: "0", fontSize: "26px", fontWeight: "bold", textTransform: "uppercase" }}>
+                      {formData.firstName} {formData.lastName}
+                    </h2>
+                  )}
                   
-                  <div style={{ marginTop: "auto", padding: "15px", backgroundColor: "#fafafa", borderRadius: "6px", fontSize: "11px", color: "#888" }}>
-                    <strong>VALIDITY:</strong> {formData.startDate && formData.completionDate ? `${formData.startDate} to ${formData.completionDate}` : "Select dates"}
-                  </div>
+                  {formData.mainProject && (
+                    <p style={{ fontWeight: "700", color: colors.dark, margin: "15px 0", fontSize: "18px" }}>
+                      {formData.mainProject}
+                    </p>
+                  )}
+                  
+                  {formData.details && (
+                    <p style={{ fontSize: "13px", color: "#666", lineHeight: "1.5" }}>
+                      {formData.details}
+                    </p>
+                  )}
+                  
+                  {(formData.startDate || formData.completionDate) && (
+                    <div style={{ marginTop: "auto", padding: "15px", backgroundColor: "#fafafa", borderRadius: "6px", fontSize: "11px", color: "#888" }}>
+                      <strong>VALIDITY:</strong> {formData.startDate} {formData.startDate && formData.completionDate ? "to" : ""} {formData.completionDate}
+                    </div>
+                  )}
                 </div>
               </div>
             )}
           </div>
           <p style={{ textAlign: "center", fontSize: "11px", color: "#999", marginTop: "15px" }}>
-            {badgeUrl ? "OFFICIAL NFT GENERATED" : "REAL-TIME DRAFT"}
+            {badgeUrl ? "OFFICIAL NFT GENERATED" : "REAL-TIME PREVIEW"}
           </p>
         </div>
 
