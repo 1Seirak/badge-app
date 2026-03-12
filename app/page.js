@@ -117,14 +117,14 @@ export default function Home() {
                <img src={badgeUrl} alt="Final Badge" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             ) : (
               <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
-                <div style={{ width: "100%", height: "200px", backgroundColor: "#f3f4f6", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: `2px solid ${colors.elcaRed}`, overflow: "hidden" }}>
-                  {formData.imageLink ? (
+                {/* RECTANGULAR IMAGE SPACE (EMPTY BY DEFAULT) */}
+                <div style={{ width: "100%", height: "200px", backgroundColor: "#f9fafb", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: `2px solid ${colors.elcaRed}`, overflow: "hidden" }}>
+                  {formData.imageLink && (
                     <img src={formData.imageLink} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
-                  ) : (
-                    <span style={{fontSize: "50px"}}>🖼️</span>
                   )}
                 </div>
 
+                {/* TEXT CONTENT */}
                 <div style={{ padding: "30px", textAlign: "center", display: "flex", flexDirection: "column", flex: 1 }}>
                   <h2 style={{ color: colors.elcaRed, margin: "0", fontSize: "26px", fontWeight: "bold", textTransform: "uppercase" }}>
                     {formData.firstName || "First"} {formData.lastName || "Last"}
@@ -133,11 +133,11 @@ export default function Home() {
                     {formData.mainProject || "Project Name"}
                   </p>
                   <p style={{ fontSize: "13px", color: "#666", lineHeight: "1.5" }}>
-                    {formData.details || "Your project details and achievement description will appear here..."}
+                    {formData.details || "Description will appear here..."}
                   </p>
                   
                   <div style={{ marginTop: "auto", padding: "15px", backgroundColor: "#fafafa", borderRadius: "6px", fontSize: "11px", color: "#888" }}>
-                    <strong>VALIDITY:</strong> {formData.startDate && formData.completionDate ? `${formData.startDate} to ${formData.completionDate}` : "Not specified"}
+                    <strong>VALIDITY:</strong> {formData.startDate && formData.completionDate ? `${formData.startDate} to ${formData.completionDate}` : "Select dates"}
                   </div>
                 </div>
               </div>
