@@ -17,12 +17,12 @@ export default function Home() {
   const [loading, setLoading] = useState(false);
 
   const colors = {
-    elcaRed: "#ff483a",
+    elcaRed: "#ff483a",    // Your specific ELCA color
     dark: "#1a1a1a",
-    background: "#f4f4f7", // Application background
-    card: "#ffffff",       // Form and Badge background
+    background: "#f4f4f7", 
+    card: "#ffffff",       
     border: "#e5e7eb",
-    text: "#374151"
+    ghostText: "#d1d5db"   // Light grey for placeholders
   };
 
   const handleSubmit = async (e) => {
@@ -110,62 +110,80 @@ export default function Home() {
 
         {/* RIGHT: THE BADGE */}
         <div style={columnCardStyle}>
-          {/* Internal badge container now has a distinct white background and subtle shadow */}
           <div style={{ 
             flex: 1, 
             display: "flex", 
             flexDirection: "column", 
             border: `1px solid ${colors.border}`, 
             borderRadius: "12px", 
-            backgroundColor: "#ffffff", // Pure white for the badge itself
+            backgroundColor: "#ffffff", 
             overflow: "hidden", 
-            marginTop: "42px",
-            boxShadow: "0 4px 15px rgba(0,0,0,0.03)" 
+            marginTop: "42px"
           }}>
-            
             {badgeUrl ? (
                <img src={badgeUrl} alt="Final Badge" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             ) : (
               <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
-                <div style={{ width: "100%", height: "200px", backgroundColor: "#fdfdfd", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: `1px solid ${colors.border}`, overflow: "hidden" }}>
-                  {formData.imageLink && (
-                    <img src={formData.imageLink} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
+                {/* IMAGE AREA WITH #ff483a */}
+                <div style={{ 
+                  width: "100%", 
+                  height: "200px", 
+                  backgroundColor: "#ff483a", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center", 
+                  overflow: "hidden" 
+                }}>
+                  {formData.imageLink ? (
+                    <img src={formData.imageLink} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Preview" />
+                  ) : (
+                    <span style={{ fontSize: "24px", fontWeight: "bold", color: "#f3f4f6", textTransform: "uppercase", letterSpacing: "2px", opacity: 0.8 }}>
+                      badge
+                    </span>
                   )}
                 </div>
 
                 <div style={{ padding: "30px", textAlign: "center", display: "flex", flexDirection: "column", flex: 1 }}>
-                  {(formData.firstName || formData.lastName) && (
-                    <h2 style={{ color: colors.elcaRed, margin: "0", fontSize: "26px", fontWeight: "bold", textTransform: "uppercase" }}>
-                      {formData.firstName} {formData.lastName}
-                    </h2>
-                  )}
+                  <h2 style={{ 
+                    color: (formData.firstName || formData.lastName) ? colors.elcaRed : colors.ghostText, 
+                    margin: "0", fontSize: "26px", fontWeight: "bold", textTransform: "uppercase" 
+                  }}>
+                    {formData.firstName || "Jane"} {formData.lastName || "Doe"}
+                  </h2>
                   
-                  {formData.mainProject && (
-                    <p style={{ fontWeight: "700", color: colors.dark, margin: "15px 0", fontSize: "18px" }}>
-                      {formData.mainProject}
-                    </p>
-                  )}
+                  <p style={{ 
+                    fontWeight: "700", 
+                    color: formData.mainProject ? colors.dark : colors.ghostText, 
+                    margin: "15px 0", fontSize: "18px" 
+                  }}>
+                    {formData.mainProject || "Project Name"}
+                  </p>
                   
-                  {formData.details && (
-                    <p style={{ fontSize: "13px", color: "#666", lineHeight: "1.5" }}>
-                      {formData.details}
-                    </p>
-                  )}
+                  <p style={{ 
+                    fontSize: "13px", 
+                    color: formData.details ? "#666" : colors.ghostText, 
+                    lineHeight: "1.5" 
+                  }}>
+                    {formData.details || "Your project details and achievement description will appear here..."}
+                  </p>
                   
-                  {(formData.startDate || formData.completionDate) && (
-                    <div style={{ marginTop: "auto", padding: "15px", backgroundColor: "#f9fafb", borderRadius: "6px", fontSize: "11px", color: "#888", border: `1px solid ${colors.border}` }}>
-                      <strong>CHALLENGE PERIOD:</strong> {formData.startDate} {formData.startDate && formData.completionDate ? "to" : ""} {formData.completionDate}
-                    </div>
-                  )}
+                  <div style={{ 
+                    marginTop: "auto", padding: "15px", 
+                    backgroundColor: "#f9fafb", borderRadius: "6px", 
+                    fontSize: "11px", 
+                    color: (formData.startDate || formData.completionDate) ? "#888" : colors.ghostText, 
+                    border: `1px solid ${colors.border}` 
+                  }}>
+                    <strong style={{ color: (formData.startDate || formData.completionDate) ? colors.elcaRed : colors.ghostText }}>CHALLENGE PERIOD:</strong> {formData.startDate || "YYYY-MM-DD"} to {formData.completionDate || "YYYY-MM-DD"}
+                  </div>
                 </div>
               </div>
             )}
           </div>
           <p style={{ textAlign: "center", fontSize: "11px", color: "#999", marginTop: "15px" }}>
-            {badgeUrl ? "OFFICIAL NFT GENERATED" : "BETA PREVIEW"}
+            {badgeUrl ? "OFFICIAL NFT GENERATED" : "REAL-TIME CERTIFICATE DRAFT"}
           </p>
         </div>
-
       </div>
     </div>
   );
