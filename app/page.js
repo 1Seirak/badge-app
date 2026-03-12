@@ -1,81 +1,173 @@
 "use client";
-import { useState } from 'react';
+import { useState } from "react";
 
-export default function BadgeApp() {
-  const [info, setInfo] = useState({ 
-    firstName: '', lastName: '', project: '', 
-    startDate: '', endDate: '', details: '', 
-    imageLink: '', wallet: '' 
+export default function Home() {
+  const [formData, setFormData] = useState({
+    recipient: "",
+    name: "",
+    project: "",
   });
-  const [status, setStatus] = useState('');
+  const [status, setStatus] = useState("");
+  const [badgeUrl, setBadgeUrl] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  // ASTUCE : On génère une URL d'image qui contient le texte du projet pour respecter la consigne "générée"
-  const generatedImageUrl = info.project 
-    ? `https://placehold.co/600x400/8247e5/white?text=${encodeURIComponent(info.project)}+for+${encodeURIComponent(info.firstName)}`
-    : info.imageLink;
+  // Thème ELCA Informatique
+  const colors = {
+    elcaRed: "#ff483a",
+    dark: "#1a1a1a",
+    background: "#fdfdfd",
+    card: "#ffffff",
+    border: "#eeeeee",
+    text: "#2d2d2d"
+  };
 
-  const handleMint = async () => {
-    if (!info.wallet) return setStatus('❌ Adresse wallet manquante');
-    setStatus('Minting en cours... ⏳');
-    
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus("Transaction en cours sur Polygon Amoy...");
     try {
-      const response = await fetch('/api/mint', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        // On envoie l'image générée dynamiquement
-        body: JSON.stringify({ ...info, generatedImage: generatedImageUrl }),
+      const res = await fetch("/api/mint", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
       });
-      const data = await response.json();
+      const data = await res.json();
       if (data.success) {
-        setStatus(`✅ Succès ! Hash: ${data.hash.substring(0,10)}...`);
+        setStatus("✅ Badge généré avec succès !");
+        if (data.imageUrl) setBadgeUrl(data.imageUrl);
       } else {
-        setStatus('❌ Erreur : ' + data.error);
+        setStatus("❌ Erreur : " + data.error);
       }
     } catch (err) {
-      setStatus('❌ Erreur réseau');
+      setStatus("❌ Erreur de connexion");
+    } finally {
+      setLoading(false);
     }
   };
 
-  return (
-    <div style={{ display: 'flex', flexWrap: 'wrap', padding: '20px', gap: '20px', fontFamily: 'sans-serif', backgroundColor: '#f0f2f5' }}>
-      
-      {/* 1. FORMULAIRE COMPLET */}
-      <div style={{ flex: '1', minWidth: '350px', background: 'white', padding: '20px', borderRadius: '10px' }}>
-        <h2 style={{ color: '#8247e5' }}>Badge Info</h2>
-        <div style={{ display: 'grid', gap: '10px' }}>
-          <input placeholder="First Name" onChange={e => setInfo({...info, firstName: e.target.value})} style={inputStyle} />
-          <input placeholder="Last Name" onChange={e => setInfo({...info, lastName: e.target.value})} style={inputStyle} />
-          <input placeholder="Main Project" onChange={e => setInfo({...info, project: e.target.value})} style={inputStyle} />
-          <div style={{ display: 'flex', gap: '5px' }}>
-            <input type="date" title="Start Date" onChange={e => setInfo({...info, startDate: e.target.value})} style={inputStyle} />
-            <input type="date" title="End Date" onChange={e => setInfo({...info, endDate: e.target.value})} style={inputStyle} />
-          </div>
-          <textarea placeholder="Details" onChange={e => setInfo({...info, details: e.target.value})} style={inputStyle} />
-          <input placeholder="Image Link (Backup)" onChange={e => setInfo({...info, imageLink: e.target.value})} style={inputStyle} />
-          <input placeholder="Recipient Wallet (0x...)" onChange={e => setInfo({...info, wallet: e.target.value})} style={inputStyle} />
-          
-          <button onClick={handleMint} style={btnStyle}>Mint Badge (Gasless)</button>
-          <p style={{ fontSize: '14px' }}>{status}</p>
-        </div>
-      </div>
+  const inputStyle = {
+    width: "100%",
+    padding: "14px",
+    borderRadius: "6px",
+    border: `1px solid ${colors.border}`,
+    marginBottom: "18px",
+    fontSize: "15px",
+    fontFamily: "'Segoe UI', Roboto, sans-serif",
+    color: colors.text,
+    backgroundColor: "#fafafa",
+    boxSizing: "border-box"
+  };
 
-      {/* 2. LIVE PREVIEW */}
-      <div style={{ flex: '1', minWidth: '300px', display: 'flex', justifyContent: 'center' }}>
-        <div style={badgeStyle}>
-          <div style={{ padding: '15px', background: '#8247e5', color: 'white', fontWeight: 'bold' }}>PROJECT COMPLETION</div>
-          <img src={generatedImageUrl || 'https://via.placeholder.com/150'} style={{ width: '100%' }} alt="Generated Badge" />
-          <div style={{ padding: '20px' }}>
-            <h3 style={{ margin: '0' }}>{info.firstName} {info.lastName}</h3>
-            <p style={{ margin: '5px 0', fontWeight: 'bold', color: '#8247e5' }}>{info.project || 'Project Name'}</p>
-            <p style={{ fontSize: '12px', color: '#666' }}>{info.startDate} to {info.endDate}</p>
-            <p style={{ fontSize: '13px', fontStyle: 'italic' }}>{info.details}</p>
+  const labelStyle = {
+    display: "block",
+    fontSize: "11px",
+    fontWeight: "700",
+    color: "#888",
+    textTransform: "uppercase",
+    letterSpacing: "1px",
+    marginBottom: "6px"
+  };
+
+  return (
+    <div style={{ 
+      backgroundColor: colors.background, 
+      minHeight: "100vh", 
+      display: "flex", 
+      alignItems: "center", 
+      justifyContent: "center",
+      fontFamily: "'Segoe UI', Tahoma, Geneva, Verdana, sans-serif",
+      padding: "20px"
+    }}>
+      <div style={{ 
+        backgroundColor: colors.card, 
+        padding: "45px", 
+        borderRadius: "2px", // Style plus corporate
+        boxShadow: "0 20px 40px rgba(0,0,0,0.08)",
+        maxWidth: "480px",
+        width: "100%",
+        borderTop: `5px solid ${colors.elcaRed}` // Ligne de rappel ELCA
+      }}>
+        <h1 style={{ fontSize: "28px", fontWeight: "900", marginBottom: "5px", color: colors.dark }}>
+          EDI CHALLENGE
+        </h1>
+        <p style={{ color: "#666", marginBottom: "35px", fontSize: "14px" }}>
+          Badge Minting Portal — 2026
+        </p>
+
+        <form onSubmit={handleSubmit}>
+          <label style={labelStyle}>Recipient Wallet Address</label>
+          <input 
+            style={inputStyle}
+            placeholder="0x..." 
+            onChange={(e) => setFormData({ ...formData, recipient: e.target.value })} 
+            required 
+          />
+          
+          <label style={labelStyle}>Full Name</label>
+          <input 
+            style={inputStyle}
+            placeholder="Sarah Kazi" 
+            onChange={(e) => setFormData({ ...formData, name: e.target.value })} 
+            required 
+          />
+          
+          <label style={labelStyle}>Main Project</label>
+          <input 
+            style={inputStyle}
+            placeholder="Ex: ELCA Digital Innovation" 
+            onChange={(e) => setFormData({ ...formData, project: e.target.value })} 
+            required 
+          />
+
+          <button 
+            type="submit" 
+            disabled={loading}
+            style={{ 
+              width: "100%", 
+              padding: "16px", 
+              backgroundColor: loading ? "#ccc" : colors.elcaRed, 
+              color: "white", 
+              border: "none", 
+              borderRadius: "4px", 
+              fontWeight: "bold", 
+              fontSize: "15px",
+              textTransform: "uppercase",
+              letterSpacing: "1px",
+              cursor: loading ? "not-allowed" : "pointer",
+              transition: "all 0.3s ease"
+            }}
+          >
+            {loading ? "Traitement..." : "Minter le Badge"}
+          </button>
+        </form>
+
+        {status && (
+          <div style={{ 
+            marginTop: "25px", 
+            padding: "12px", 
+            borderRadius: "4px", 
+            backgroundColor: status.includes("✅") ? "#f0fdf4" : "#fff5f5",
+            color: status.includes("✅") ? "#16a34a" : colors.elcaRed,
+            fontSize: "13px",
+            textAlign: "center",
+            border: `1px solid ${status.includes("✅") ? "#bbf7d0" : "#ffd8d8"}`
+          }}>
+            {status}
           </div>
-        </div>
+        )}
+
+        {/* Preview Section - Apparaît seulement si l'image est là */}
+        {badgeUrl && (
+          <div style={{ marginTop: "35px", borderTop: `1px solid ${colors.border}`, paddingTop: "25px" }}>
+            <p style={{ fontSize: "12px", fontWeight: "bold", marginBottom: "15px", textAlign: "center", color: "#888" }}>VOTRE BADGE GÉNÉRÉ :</p>
+            <img 
+              src={badgeUrl} 
+              alt="Generated NFT Badge" 
+              style={{ width: "100%", borderRadius: "4px", boxShadow: "0 8px 16px rgba(0,0,0,0.1)" }} 
+            />
+          </div>
+        )}
       </div>
     </div>
   );
 }
-
-const inputStyle = { padding: '8px', border: '1px solid #ddd', borderRadius: '4px', width: '100%' };
-const btnStyle = { padding: '12px', background: '#8247e5', color: 'white', border: 'none', cursor: 'pointer', borderRadius: '5px' };
-const badgeStyle = { width: '300px', background: 'white', boxShadow: '0 4px 15px rgba(0,0,0,0.1)', borderRadius: '10px', overflow: 'hidden', textAlign: 'center' };
