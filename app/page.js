@@ -18,12 +18,12 @@ export default function Home() {
 
   const colors = {
     elcaRed: "#ff483a",
-    badgeBlue: "#2596be", // Your specific blue
-    dark: "#1a1a1a",
-    background: "#f4f4f7",
-    card: "#ffffff",
+    anthracite: "#414344", // Nouveau gris pour l'image placeholder
+    background: "#f4f4f7", // Fond de l'application
+    card: "#ffffff",       // Fond de la colonne de gauche
+    badgeContent: "#fcfcfc", // Gris très clair (proche du blanc) pour le corps du badge
     border: "#e5e7eb",
-    placeholderText: "#9ca3af" // Stronger contrast for placeholders
+    placeholderText: "#9ca3af"
   };
 
   const handleSubmit = async (e) => {
@@ -72,7 +72,7 @@ export default function Home() {
         
         {/* LEFT: FORM */}
         <div style={columnCardStyle}>
-          <h1 style={{ fontSize: "22px", fontWeight: "800", marginBottom: "20px", color: colors.dark }}>BADGE METADATA</h1>
+          <h1 style={{ fontSize: "22px", fontWeight: "800", marginBottom: "20px", color: "#1a1a1a" }}>BADGE METADATA</h1>
           <form onSubmit={handleSubmit}>
             <div style={{ display: "flex", gap: "10px" }}>
               <div style={{ flex: 1 }}>
@@ -114,21 +114,23 @@ export default function Home() {
           <div style={{ 
             flex: 1, display: "flex", flexDirection: "column", 
             border: `1px solid ${colors.border}`, borderRadius: "12px", 
-            backgroundColor: "#ffffff", overflow: "hidden", marginTop: "42px"
+            backgroundColor: colors.badgeContent, // Gris très clair ici
+            overflow: "hidden", marginTop: "42px",
+            boxShadow: "0 4px 12px rgba(0,0,0,0.05)"
           }}>
             {badgeUrl ? (
                <img src={badgeUrl} alt="Final Badge" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             ) : (
               <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
-                {/* BLUE HEADER BLOCK */}
+                {/* IMAGE AREA ANTHRACITE #414344 */}
                 <div style={{ 
-                  width: "100%", height: "200px", backgroundColor: colors.badgeBlue, 
+                  width: "100%", height: "200px", backgroundColor: colors.anthracite, 
                   display: "flex", alignItems: "center", justifyContent: "center" 
                 }}>
                   {formData.imageLink ? (
                     <img src={formData.imageLink} style={{width: '100%', height: '100%', objectFit: 'cover'}} alt="Preview" />
                   ) : (
-                    <span style={{ fontSize: "24px", fontWeight: "bold", color: "#ffffff", textTransform: "uppercase", letterSpacing: "2px" }}>
+                    <span style={{ fontSize: "24px", fontWeight: "bold", color: "rgba(255,255,255,0.6)", textTransform: "uppercase", letterSpacing: "3px" }}>
                       badge
                     </span>
                   )}
@@ -145,7 +147,7 @@ export default function Home() {
                   
                   <p style={{ 
                     fontWeight: "700", 
-                    color: formData.mainProject ? colors.dark : colors.placeholderText, 
+                    color: formData.mainProject ? "#1a1a1a" : colors.placeholderText, 
                     margin: "15px 0", fontSize: "18px" 
                   }}>
                     {formData.mainProject || "Project Name"}
@@ -161,7 +163,7 @@ export default function Home() {
                   
                   <div style={{ 
                     marginTop: "auto", padding: "15px", 
-                    backgroundColor: "#f9fafb", borderRadius: "6px", 
+                    backgroundColor: "#f0f1f3", borderRadius: "6px", 
                     fontSize: "11px", 
                     color: (formData.startDate || formData.completionDate) ? "#4b5563" : colors.placeholderText, 
                     border: `1px solid ${colors.border}` 
@@ -172,8 +174,9 @@ export default function Home() {
               </div>
             )}
           </div>
-          <p style={{ textAlign: "center", fontSize: "11px", color: "#999", marginTop: "15px" }}>
-            {badgeUrl ? "OFFICIAL NFT GENERATED" : "REAL-TIME CERTIFICATE DRAFT"}
+          {/* TEXTE MIS À JOUR : live preview */}
+          <p style={{ textAlign: "center", fontSize: "11px", color: "#999", marginTop: "15px", textTransform: "uppercase", letterSpacing: "1px" }}>
+            {badgeUrl ? "OFFICIAL NFT GENERATED" : "live preview"}
           </p>
         </div>
       </div>
