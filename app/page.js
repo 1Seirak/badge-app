@@ -70,6 +70,19 @@ export default function Home() {
     letterSpacing: "0.5px"
   };
 
+  // Style commun pour les deux colonnes (Formulaire et Badge)
+  const columnCardStyle = {
+    flex: "1", 
+    backgroundColor: colors.card, 
+    padding: "35px", 
+    borderRadius: "8px", 
+    boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
+    borderTop: `4px solid ${colors.elcaRed}`,
+    minHeight: "550px", // Pour que les deux colonnes aient la même taille
+    display: "flex",
+    flexDirection: "column"
+  };
+
   return (
     <div style={{ 
       backgroundColor: colors.background, 
@@ -78,29 +91,22 @@ export default function Home() {
       flexDirection: "column",
       alignItems: "center", 
       justifyContent: "center",
-      fontFamily: "'Inter', -apple-system, sans-serif",
+      fontFamily: "'Segoe UI', Roboto, sans-serif",
       padding: "20px"
     }}>
       <div style={{ 
         display: "flex", 
-        gap: "40px", 
-        maxWidth: "1000px", 
+        gap: "20px", 
+        maxWidth: "1100px", 
         width: "100%",
-        alignItems: "flex-start"
+        alignItems: "stretch" // Pour qu'elles fassent la même hauteur
       }}>
         
         {/* LEFT COLUMN: FORM */}
-        <div style={{ 
-          flex: "1", 
-          backgroundColor: colors.card, 
-          padding: "35px", 
-          borderRadius: "8px", 
-          boxShadow: "0 4px 20px rgba(0,0,0,0.05)",
-          borderTop: `4px solid ${colors.elcaRed}`
-        }}>
+        <div style={columnCardStyle}>
           <h1 style={{ fontSize: "22px", fontWeight: "800", marginBottom: "20px", color: colors.dark }}>BADGE METADATA</h1>
           
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit} style={{ flex: 1 }}>
             <div style={{ display: "flex", gap: "10px" }}>
               <div style={{ flex: 1 }}>
                 <label style={labelStyle}>First Name</label>
@@ -145,7 +151,8 @@ export default function Home() {
               fontWeight: "bold", 
               cursor: loading ? "not-allowed" : "pointer",
               marginTop: "10px",
-              fontSize: "14px"
+              fontSize: "14px",
+              transition: "opacity 0.2s"
             }}>
               {loading ? "PROCESSING..." : "MINT BADGE"}
             </button>
@@ -153,32 +160,36 @@ export default function Home() {
           {status && <div style={{ marginTop: "15px", fontSize: "12px", textAlign: "center", color: colors.elcaRed, fontWeight: "600" }}>{status}</div>}
         </div>
 
-        {/* RIGHT COLUMN: PREVIEW */}
-        <div style={{ flex: "1", position: "sticky", top: "20px" }}>
+        {/* RIGHT COLUMN: PREVIEW (SIDE-BY-SIDE CONSISTENCY) */}
+        <div style={columnCardStyle}>
+          <h1 style={{ fontSize: "22px", fontWeight: "800", marginBottom: "20px", color: colors.dark }}>PREVIEW</h1>
           <div style={{ 
-            backgroundColor: "#111827", // Dark theme for preview like the example
-            borderRadius: "12px",
-            padding: "20px",
-            minHeight: "450px",
+            flex: 1,
             display: "flex",
             flexDirection: "column",
             alignItems: "center",
             justifyContent: "center",
-            boxShadow: "0 10px 30px rgba(0,0,0,0.2)",
-            color: "white",
-            textAlign: "center"
+            border: `1px dashed ${colors.border}`,
+            borderRadius: "6px",
+            backgroundColor: "#fafafa",
+            overflow: "hidden"
           }}>
-            {badgeUrl ? (
-              <>
-                <p style={{ fontSize: "10px", color: colors.elcaRed, fontWeight: "bold", marginBottom: "15px", letterSpacing: "2px" }}>NFT PREVIEW READY</p>
-                <img src={badgeUrl} alt="NFT Badge" style={{ width: "100%", borderRadius: "8px", border: "1px solid #374151" }} />
-              </>
-            ) : (
-              <div style={{ opacity: 0.5 }}>
-                <div style={{ fontSize: "40px", marginBottom: "10px" }}>🖼️</div>
-                <p style={{ fontSize: "14px", fontWeight: "300" }}>Your dynamic badge<br/>will appear here after minting.</p>
-                <div style={{ marginTop: "20px", fontSize: "10px", color: colors.elcaRed }}>STATUS: WAITING FOR DATA</div>
-              </div>
+            <img 
+              src={badgeUrl || "https://placehold.co/400x400/eeeeee/999999?text=Badge+Preview"} 
+              alt="NFT Badge" 
+              style={{ 
+                width: "100%", 
+                height: "auto", 
+                maxWidth: "350px",
+                borderRadius: "4px", 
+                boxShadow: badgeUrl ? "0 8px 25px rgba(0,0,0,0.1)" : "none",
+                transition: "all 0.5s ease"
+              }} 
+            />
+            {!badgeUrl && (
+              <p style={{ marginTop: "20px", fontSize: "12px", color: "#999", fontWeight: "500" }}>
+                Ready to generate your badge
+              </p>
             )}
           </div>
         </div>
