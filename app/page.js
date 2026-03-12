@@ -19,8 +19,8 @@ export default function Home() {
   const colors = {
     elcaRed: "#ff483a",
     dark: "#1a1a1a",
-    background: "#f4f4f7",
-    card: "#ffffff",
+    background: "#f4f4f7", // Application background
+    card: "#ffffff",       // Form and Badge background
     border: "#e5e7eb",
     text: "#374151"
   };
@@ -61,13 +61,13 @@ export default function Home() {
 
   const columnCardStyle = {
     flex: "1", backgroundColor: colors.card, padding: "35px", borderRadius: "8px",
-    boxShadow: "0 4px 20px rgba(0,0,0,0.05)", borderTop: `4px solid ${colors.elcaRed}`,
+    boxShadow: "0 10px 30px rgba(0,0,0,0.08)", borderTop: `4px solid ${colors.elcaRed}`,
     minHeight: "650px", display: "flex", flexDirection: "column"
   };
 
   return (
     <div style={{ backgroundColor: colors.background, minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", fontFamily: "'Segoe UI', Roboto, sans-serif", padding: "20px" }}>
-      <div style={{ display: "flex", gap: "20px", maxWidth: "1100px", width: "100%", alignItems: "stretch" }}>
+      <div style={{ display: "flex", gap: "30px", maxWidth: "1100px", width: "100%", alignItems: "stretch" }}>
         
         {/* LEFT: FORM */}
         <div style={columnCardStyle}>
@@ -108,23 +108,31 @@ export default function Home() {
           {status && <div style={{ marginTop: "15px", fontSize: "12px", textAlign: "center", color: colors.elcaRed, fontWeight: "600" }}>{status}</div>}
         </div>
 
-        {/* RIGHT: LIVE PREVIEW (MINIMALIST) */}
+        {/* RIGHT: THE BADGE */}
         <div style={columnCardStyle}>
-          <h1 style={{ fontSize: "22px", fontWeight: "800", marginBottom: "20px", color: colors.dark }}>LIVE PREVIEW</h1>
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", border: `1px solid ${colors.border}`, borderRadius: "12px", background: "white", overflow: "hidden" }}>
+          {/* Internal badge container now has a distinct white background and subtle shadow */}
+          <div style={{ 
+            flex: 1, 
+            display: "flex", 
+            flexDirection: "column", 
+            border: `1px solid ${colors.border}`, 
+            borderRadius: "12px", 
+            backgroundColor: "#ffffff", // Pure white for the badge itself
+            overflow: "hidden", 
+            marginTop: "42px",
+            boxShadow: "0 4px 15px rgba(0,0,0,0.03)" 
+          }}>
             
             {badgeUrl ? (
                <img src={badgeUrl} alt="Final Badge" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
             ) : (
               <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column" }}>
-                {/* IMAGE AREA */}
-                <div style={{ width: "100%", height: "200px", backgroundColor: "#f9fafb", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: `2px solid ${colors.elcaRed}`, overflow: "hidden" }}>
+                <div style={{ width: "100%", height: "200px", backgroundColor: "#fdfdfd", display: "flex", alignItems: "center", justifyContent: "center", borderBottom: `1px solid ${colors.border}`, overflow: "hidden" }}>
                   {formData.imageLink && (
                     <img src={formData.imageLink} style={{width: '100%', height: '100%', objectFit: 'cover'}} />
                   )}
                 </div>
 
-                {/* TEXT AREA - ONLY SHOWS IF DATA EXISTS */}
                 <div style={{ padding: "30px", textAlign: "center", display: "flex", flexDirection: "column", flex: 1 }}>
                   {(formData.firstName || formData.lastName) && (
                     <h2 style={{ color: colors.elcaRed, margin: "0", fontSize: "26px", fontWeight: "bold", textTransform: "uppercase" }}>
@@ -145,8 +153,8 @@ export default function Home() {
                   )}
                   
                   {(formData.startDate || formData.completionDate) && (
-                    <div style={{ marginTop: "auto", padding: "15px", backgroundColor: "#fafafa", borderRadius: "6px", fontSize: "11px", color: "#888" }}>
-                      <strong>VALIDITY:</strong> {formData.startDate} {formData.startDate && formData.completionDate ? "to" : ""} {formData.completionDate}
+                    <div style={{ marginTop: "auto", padding: "15px", backgroundColor: "#f9fafb", borderRadius: "6px", fontSize: "11px", color: "#888", border: `1px solid ${colors.border}` }}>
+                      <strong>CHALLENGE PERIOD:</strong> {formData.startDate} {formData.startDate && formData.completionDate ? "to" : ""} {formData.completionDate}
                     </div>
                   )}
                 </div>
@@ -154,7 +162,7 @@ export default function Home() {
             )}
           </div>
           <p style={{ textAlign: "center", fontSize: "11px", color: "#999", marginTop: "15px" }}>
-            {badgeUrl ? "OFFICIAL NFT GENERATED" : "REAL-TIME PREVIEW"}
+            {badgeUrl ? "OFFICIAL NFT GENERATED" : "BETA PREVIEW"}
           </p>
         </div>
 
